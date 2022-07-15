@@ -26,7 +26,6 @@ public class Result <T> {
                 .body(Result.builder()
                 .status(resultCode.getHttpStatus().value())
                 .result(resultCode.getHttpStatus())
-                .code(resultCode.name())
                 .message(resultCode.getDetail())
                 .build()
                 );
@@ -37,11 +36,13 @@ public class Result <T> {
         return ResponseEntity
                 .status(resultCode.getHttpStatus())
                 .body(Result.<T>builder()
-                .status(resultCode.getHttpStatus().value())
-                .result(resultCode.getHttpStatus())
-                .message(resultCode.getDetail())
-                .build()
+                        .status(resultCode.getHttpStatus().value())
+                        .result(resultCode.getHttpStatus())
+                        .message(resultCode.getDetail())
+                        .data(data)
+                        .build()
                 );
+
     }
 
 }

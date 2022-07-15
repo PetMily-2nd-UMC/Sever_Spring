@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @RequiredArgsConstructor
 public class TokenDto {
-    private String grantType = "Bearer ";
+    //private String grantType = "Bearer ";
     private final String accessToken;
     private final String refreshToken;
     private final Long accessTokenExpireIn;

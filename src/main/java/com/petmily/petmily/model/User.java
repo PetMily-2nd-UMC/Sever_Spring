@@ -10,7 +10,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 
 @Setter
@@ -23,13 +22,13 @@ public class User implements UserDetails {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String username;
+    private String userName;
 
     @Column(nullable = false)
-    private String password;
+    private String passWord;
 
     @Column(nullable = false, unique = true)
-    private String nickname;
+    private String nickName;
 
     @Column(nullable = true)
     private String profileUrl;
@@ -75,18 +74,18 @@ public class User implements UserDetails {
 
     @Override
     public String getPassword() {
-        return password;
+        return passWord;
     }
 
     @Override
     public String getUsername() {
-        return username;
+        return userName;
     }
 
-    public User(String username, String password, String nickname, String profileUrl, UserRoleEnum role) {
-        this.username = username;
-        this.password = password;
-        this.nickname = nickname;
+    public User(String userName, String passWord, String nickName, String profileUrl, UserRoleEnum role) {
+        this.userName = userName;
+        this.passWord = passWord;
+        this.nickName = nickName;
         this.profileUrl = profileUrl;
         this.role = role;
     }

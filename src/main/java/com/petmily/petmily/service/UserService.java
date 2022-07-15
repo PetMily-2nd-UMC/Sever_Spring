@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.util.Optional;
 
 @Service
@@ -53,15 +52,12 @@ public class UserService {
     public TokenDto loginUser(LoginReq requestDto) {
         logger.error("loginuser: "+requestDto.getUsername());
 
-        Optional<User> user = Optional.ofNullable(userRepository.findByUsername(requestDto.getUsername())
+        Optional<User> user = Optional.ofNullable(userRepository.findByuserName(requestDto.getUsername())
                 .orElseThrow(() -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다.")));
 
-        logger.error(String.valueOf(user.isPresent()));
         if(user.isPresent()){
-            //logger.error(passwordEncoder.encode(requestDto.getPassword()));
-            if(user.get().getPassword().equals(passwordEncoder.encode(requestDto.getPassword()))){
-                logger.error("loginuser: "+requestDto.getPassword());
-                return jwtProvider.generateToken(requestDto.getPassword());
+            if(passwordEncoder.matches(requestDto.getPassword(), user.get().getPassword())){
+                return jwtProvider.generateToken(requestDto.getUsername());
             }
             return null;
         }

@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Date;
 
 
@@ -32,29 +34,30 @@ public class JwtProvider {
     }
 
 
-
+    @Transactional(readOnly = true)
     public TokenDto generateToken(String username){
         Date now = new Date();
-        Long userId = userRepository.findIdByUsername(username);
-        Claims claims = Jwts.claims().setSubject(String.valueOf(userId));
+        Long userId = userRepository.findIdByuserName(username)
+                .orElseThrow(() -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다."));
+
+        Claims claims = Jwts.claims().setSubject(userId.toString());
         Date accessTokenExpireIn = new Date(now.getTime() + ACCESS_TOKEN_VALID_PERIOD);
 
         String accessToken = Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(accessTokenExpireIn)
-                .signWith(SignatureAlgorithm.ES512, jwtSecret)
+                .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
 
         String refreshToken = Jwts.builder()
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + REFRESH_TOKEN_VALID_PERIOD))
-                .signWith(SignatureAlgorithm.ES512, jwtSecret)
+                .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
 
-        logger.error("result: " + accessToken);
 
-        return new TokenDto(accessToken, refreshToken, accessTokenExpireIn.getTime());
+        return new TokenDto("Bearer "+ accessToken, "Bearer "+ refreshToken, accessTokenExpireIn.getTime());
     }
 
     public String getUserId(String token){
