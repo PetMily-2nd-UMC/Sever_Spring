@@ -32,4 +32,16 @@ public class Result <T> {
                 );
     }
 
+
+    public static <T>ResponseEntity<Result<T>> toResult(ResultCode resultCode, T data){
+        return ResponseEntity
+                .status(resultCode.getHttpStatus())
+                .body(Result.<T>builder()
+                .status(resultCode.getHttpStatus().value())
+                .result(resultCode.getHttpStatus())
+                .message(resultCode.getDetail())
+                .build()
+                );
+    }
+
 }
