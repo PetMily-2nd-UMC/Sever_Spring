@@ -20,7 +20,7 @@ public class UserService {
    private final PasswordEncoder passwordEncoder;
    private final UserRepository userRepository;
    private final JwtProvider jwtProvider;
-    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+   private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
    @Value("${spring.admin}")
    private static String ADMIN_KEY;
@@ -50,17 +50,18 @@ public class UserService {
     }
 
     public TokenDto loginUser(LoginReq requestDto) {
-        logger.error("loginuser: "+requestDto.getEmail());
+
+        //logger.error("loginuser: "+requestDto.getEmail());
 
         Optional<User> user = Optional.ofNullable(userRepository.findByEmail(requestDto.getEmail()))
                 .orElseThrow(() -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다."));
 
         if(user.isPresent()){
-            logger.error("ispresent: ");
+            //logger.error("ispresent: ");
             if(passwordEncoder.matches(requestDto.getPassword(), user.get().getPassword())){
-                TokenDto tokenDto = jwtProvider.generateToken(requestDto.getEmail());
-                logger.error("password: "+requestDto.getPassword());
-                return tokenDto;
+                /*TokenDto tokenDto = jwtProvider.generateToken(requestDto.getEmail());
+                logger.error("password: "+requestDto.getPassword());*/
+                return jwtProvider.generateToken(requestDto.getEmail());
             }
             return null;
         }

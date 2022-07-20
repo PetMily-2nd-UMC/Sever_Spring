@@ -32,10 +32,12 @@ public class UserController {
         return Result.toResult(ResultCode.LOGIN_SUCCESS, tokenDto);
     }
 
-    /*@GetMapping("/test")
+    /*
+    @GetMapping("/test")
     public String getMappingTest(@RequestParam String id, @RequestParam String name) {
         return "ID : " + id + ", NAME : " + name;
-    }*/
+    }
+    */
 
 
 }
