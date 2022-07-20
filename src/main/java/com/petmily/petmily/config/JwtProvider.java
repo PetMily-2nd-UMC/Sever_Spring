@@ -35,9 +35,9 @@ public class JwtProvider {
 
 
     @Transactional(readOnly = true)
-    public TokenDto generateToken(String username){
+    public TokenDto generateToken(String email){
         Date now = new Date();
-        Long userId = userRepository.findIdByuserName(username)
+        Long userId = userRepository.findIdByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다."));
 
         Claims claims = Jwts.claims().setSubject(userId.toString());
