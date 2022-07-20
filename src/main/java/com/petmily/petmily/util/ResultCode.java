@@ -14,6 +14,7 @@ public enum ResultCode {
     LOGIN_SUCCESS(OK, "로그인 성공"),
     SIGNUP_SUCCESS(OK, "회원가입 성공"),
     PUBLISH_SUCCESS(OK,"게시물 등록"),
+    LOAD_SUCCESS(OK,"게시물 로드"),
     /* 500 CONFLICT */
     INTER_SERVER_ERROR(INTERNAL_SERVER_ERROR, "서버 오류 발생"),
     ;
