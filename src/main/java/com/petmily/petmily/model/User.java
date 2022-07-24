@@ -1,17 +1,14 @@
 package com.petmily.petmily.model;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 
 @Setter
 @Getter
 @NoArgsConstructor
-@DynamicInsert
 @Entity
 public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -34,7 +31,6 @@ public class User {
     private UserRoleEnum role;
 
 
-    @Builder    //
     public User(String username, String password, String nickname, String profileUrl, UserRoleEnum role) {
         this.username = username;
         this.password = password;

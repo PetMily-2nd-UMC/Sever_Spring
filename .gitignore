@@ -8,3 +8,9 @@ out
 gen
 .gradle
 build
+
+
+User.java
+UserRepository.java
+WebSecurityConfig.java
+application.properties
