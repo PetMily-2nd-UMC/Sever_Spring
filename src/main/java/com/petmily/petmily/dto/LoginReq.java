@@ -5,11 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class SignupReq {
+public class LoginReq {
     private String email;
     private String password;
-    private String nickname;
-    private String imgUrl;
-    private boolean admin = false;
-    private String adminToken = "";
 }
