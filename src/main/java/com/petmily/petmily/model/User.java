@@ -2,7 +2,6 @@ package com.petmily.petmily.model;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,7 +11,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
 
-@Setter
 @Getter
 @NoArgsConstructor
 @Entity
@@ -22,7 +20,7 @@ public class User implements UserDetails {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String userName;
+    private String email;
 
     @Column(nullable = false)
     private String passWord;
@@ -79,11 +77,11 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return userName;
+        return email;
     }
 
-    public User(String userName, String passWord, String nickName, String profileUrl, UserRoleEnum role) {
-        this.userName = userName;
+    public User(String email, String passWord, String nickName, String profileUrl, UserRoleEnum role) {
+        this.email = email;
         this.passWord = passWord;
         this.nickName = nickName;
         this.profileUrl = profileUrl;
