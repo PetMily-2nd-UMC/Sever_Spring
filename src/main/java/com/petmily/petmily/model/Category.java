@@ -27,4 +27,7 @@ public class Category {
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private final Set<Content> contents = new HashSet<>();
 
+    public Category(CategoryEnum type) {
+        this.type = type;
+    }
 }

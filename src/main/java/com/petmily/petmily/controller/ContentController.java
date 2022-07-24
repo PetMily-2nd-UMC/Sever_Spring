@@ -1,6 +1,7 @@
 package com.petmily.petmily.controller;
 
 import com.petmily.petmily.dto.ContentDto;
+import com.petmily.petmily.dto.ContentReq;
 import com.petmily.petmily.model.Content;
 import com.petmily.petmily.model.User;
 import com.petmily.petmily.service.ContentService;
@@ -26,22 +27,63 @@ public class ContentController {
         this.contentService = contentService;
     }
 
-    @PostMapping("/create/{categoryId}")
-    public ResponseEntity<Result<Long>> createContent(@PathVariable Long categoryId,
-                                                @RequestBody ContentDto.Request requestDto,
+    //정보 게시물 작성
+    @PostMapping("/write/{categoryId}")
+    public ResponseEntity<Result<ContentDto>> createContent(@PathVariable Long categoryId,
+                                                @RequestBody ContentReq requestDto,
                                                 @AuthenticationPrincipal User user){
-        logger.error("createContent");
+        //logger.error("createContent");
         Content content = contentService.createContent(categoryId, user, requestDto);
-        //String result = "{" + "\n"+"\"contentId\": "+content.getId()+"\n" + "}";
 
-        return Result.toResult(ResultCode.PUBLISH_SUCCESS, content.getId());
+        return Result.toResult(ResultCode.PUBLISH_SUCCESS, ContentDto.builder()
+                                                        .id(content.getId()).build());
     }
 
+    //정보 게시물 수정하기
+    @PostMapping("/modify/{contentId}")
+    public ResponseEntity<Result<ContentDto>> modifyContent(@PathVariable Long contentId,
+                                                            @RequestBody ContentReq requestDto,
+                                                            @AuthenticationPrincipal User user){
 
-    @PostMapping("/{categoryId}")
+        Content content = contentService.modifyContent(contentId, user, requestDto);
+
+        return Result.toResult(ResultCode.MODIFY_SUCCESS, ContentDto.builder()
+                                                        .id(content.getId()).build());
+    }
+
+    //정보 게시물 리스트 불러오기
+    @GetMapping("/{categoryId}")
     public ResponseEntity<Result<List>> getContentsPerCategory(@PathVariable Long categoryId){
-        List<ContentDto.Response> contents = contentService.getContentsPerCategory(categoryId);
+        List<ContentDto> contents = contentService.getContentsPerCategory(categoryId);
         return Result.toResult(ResultCode.LOAD_SUCCESS, contents);
+    }
+
+    //정보 게시물 상세보기
+    @GetMapping("/detail/{contentId}")
+    public ResponseEntity<Result<ContentDto>> getContent(@PathVariable Long contentId){
+        Content content = contentService.getContent(contentId);
+        return Result.toResult(ResultCode.LOAD_SUCCESS, new ContentDto().makeResponse(content));
+    }
+
+    //정보 게시물 수정하기
+    @GetMapping("/like/{contentId}")
+    public ResponseEntity<Result<ContentDto>> addLkie(@PathVariable Long contentId,
+                                                            @AuthenticationPrincipal User user){
+
+        Content content = contentService.addLike(contentId, user);
+
+        return Result.toResult(ResultCode.ADD_SUCCESS, ContentDto.builder()
+                                                .likecount(content.getLikeCount()+1)
+                                                .createdate(content.getCreateDate().toString()).build());
+    }
+
+    //정보 게시물 삭제하기
+    @GetMapping("/delete/{contentId}")
+    public ResponseEntity<Result> deleteContent(@PathVariable Long contentId,
+                                                @AuthenticationPrincipal User user){
+        contentService.deleteContent(contentId, user);
+
+        return Result.toResult(ResultCode.DElETE_SUCCESS);
     }
 
 }
