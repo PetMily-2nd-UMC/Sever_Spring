@@ -32,6 +32,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
                 .antMatchers("/user/**").permitAll()
+                .antMatchers("/commpost/**").permitAll()
+                .antMatchers("/commpost-comment/**").permitAll()
+                .antMatchers("/commpost-like/**").permitAll()
                 .anyRequest().authenticated();
+
     }
 }
