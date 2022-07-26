@@ -26,7 +26,7 @@ public class CommentDto {
         if(comment.getStatus().equals(StatusEnum.DELETED)){
             return CommentDto.builder()
                     .createdate(comment.getCreateDate().toString())
-                    .text("삭제")
+                    .text("삭제된 댓글입니다.")
                     .build();
         }
         return CommentDto.builder()
