@@ -38,9 +38,11 @@ public class CommentController {
         return Result.toResult(ResultCode.ADD_SUCCESS, comments);
     }
 
-    public ResponseEntity<Result<List<CommentDto>>> deleteComment(@PathVariable Long contentId,
+    //정보 게시물 댓글 삭제
+    @PostMapping("/delete/{commentId}")
+    public ResponseEntity<Result<List<CommentDto>>> deleteComment(@PathVariable Long commentId,
                                                                   @AuthenticationPrincipal User user){
-        List<CommentDto> comments = commentService.deleteComment(contentId, user);
+        List<CommentDto> comments = commentService.deleteComment(commentId, user);
         return Result.toResult(ResultCode.DElETE_SUCCESS, comments);
     }
 

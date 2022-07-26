@@ -52,15 +52,21 @@ public class CommentService {
         return getCommentList(commentSet);
     }
 
-    public List<CommentDto> deleteComment(Long contentId, User user) {
-        Comment comment = commentRepository.findByContentIdAndUserId(contentId, user.getId())
+    public List<CommentDto> deleteComment(Long commentId, User user) {
+
+        Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(()->new IllegalArgumentException("댓글이 없습니다."));
 
-        comment.setDeleted();
 
-        commentRepository.save(comment);
+        if(comment.getUser().getId().equals(user.getId())){
+            comment.setDeleted();
+            commentRepository.save(comment);
+        }
+        else {
+            throw new IllegalArgumentException("게시물 삭제 권한이 없습니다.");
+        }
 
-        Set<Comment> commentSet = commentRepository.findByContentId(contentId);
+        Set<Comment> commentSet = commentRepository.findByContentId(comment.getContent().getId());
 
         return getCommentList(commentSet);
 

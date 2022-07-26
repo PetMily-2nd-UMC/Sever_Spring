@@ -8,4 +8,5 @@ import java.util.HashSet;
 public interface ContentRepository extends JpaRepository<Content, Long> {
 
     HashSet<Content> findByCategoryNo(Long categoryNo);
+
 }

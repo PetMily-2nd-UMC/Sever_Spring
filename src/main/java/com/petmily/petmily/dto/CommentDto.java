@@ -2,6 +2,7 @@ package com.petmily.petmily.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.petmily.petmily.model.Comment;
+import com.petmily.petmily.model.StatusEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,6 +23,12 @@ public class CommentDto {
     private String profileurl;
 
     public CommentDto makeResponse(Comment comment){
+        if(comment.getStatus().equals(StatusEnum.DELETED)){
+            return CommentDto.builder()
+                    .createdate(comment.getCreateDate().toString())
+                    .text("삭제")
+                    .build();
+        }
         return CommentDto.builder()
                 .id(comment.getId())
                 .text(comment.getText())
