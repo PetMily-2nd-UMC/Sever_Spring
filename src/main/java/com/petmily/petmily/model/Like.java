@@ -2,8 +2,10 @@ package com.petmily.petmily.model;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 @Getter
 @NoArgsConstructor
@@ -17,6 +19,9 @@ public class Like {
 
     @Enumerated(EnumType.STRING)
     private StatusEnum status;
+
+    @CreationTimestamp
+    private Timestamp createDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "content_id", nullable = false)
