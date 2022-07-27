@@ -20,7 +20,7 @@ public class HomeService {
     private final ContentRepository contentRepository;
     private final LikeRepository likeRepository;
 
-    private static final Logger logger = LoggerFactory.getLogger(ContentService.class);
+    private static final Logger logger = LoggerFactory.getLogger(HomeService.class);
 
     @Autowired
     public HomeService(ContentRepository contentRepository, LikeRepository likeRepository) {

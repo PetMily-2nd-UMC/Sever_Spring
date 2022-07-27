@@ -26,10 +26,11 @@ public class HomeController {
 
     @PostMapping
     public ResponseEntity<Result<TopPostDto>> registerUser(){
+        //Content DB로부터 top5 컨텐츠를 가져옴
         List<ContentDto> contents = homeService.getTopContent();
-        List<ContentDto> tmps = null; //초니님 코드에 맞게 코드 수정해주세요.
+        // List<CommPost> tmps = null; 초니님 코드에 맞게 코드 수정해주세요.
         return Result.toResult(ResultCode.LOAD_SUCCESS, TopPostDto.builder()
-                                                .contents(contents).tmps(tmps).build());
+                                                .contents(contents).build());
     }
 
 }

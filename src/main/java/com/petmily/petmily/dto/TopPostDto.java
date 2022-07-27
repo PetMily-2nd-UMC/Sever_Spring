@@ -16,6 +16,8 @@ import java.util.List;
 public class TopPostDto {
 
     private List<ContentDto> contents;
-    private List<ContentDto> tmps; //초니님 형식에 맞게 수정해주세요.
+
+    //초니님 형식에 맞게 아래 리스트 수정해주세요.
+    //private List<CommPost> tmps;
 
 }
