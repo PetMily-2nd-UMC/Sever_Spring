@@ -15,5 +15,5 @@ spring:
   admin: isadmin
 
 jwt:
-  secret: pepega524832857240
+  secret: HADEN
   admin:  isadmin

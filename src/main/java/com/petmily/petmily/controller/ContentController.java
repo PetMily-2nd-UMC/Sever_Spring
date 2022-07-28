@@ -73,7 +73,7 @@ public class ContentController {
         Content content = contentService.addLike(contentId, user);
 
         return Result.toResult(ResultCode.ADD_SUCCESS, ContentDto.builder()
-                                                .likecount(content.getLikeCount()+1)
+                                                .likecount(content.getLikeCount())
                                                 .createdate(content.getCreateDate().toString()).build());
     }
 

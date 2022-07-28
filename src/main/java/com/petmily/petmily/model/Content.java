@@ -31,10 +31,10 @@ public class Content {
     @Column(nullable = true)
     private String imgUrl;
 
-    @Formula("(select count(1) from Likecontent l where l.content_id = id)")
+    @Formula("(select count(1) from Likecontent l where l.content_id = id and l.status = 'ACTIVE')")
     private Integer likeCount;
 
-    @Formula("(select count(1) from Comment c where c.content_id = id)")
+    @Formula("(select count(1) from Comment c where c.content_id = id and c.status = 'ACTIVE')")
     private Integer commentCount;
 
     @CreationTimestamp

@@ -128,8 +128,9 @@ public class ContentService {
                 .orElseThrow(()->new IllegalArgumentException("콘텐츠가 없습니다."));
 
         if(content.getUser().getId().equals(user.getId())){
-            content.setDeleted();
-            contentRepository.save(content);
+            //content.setDeleted();
+            //contentRepository.save(content);
+            contentRepository.deleteById(contentId);
         }
         else {
             throw new IllegalArgumentException("게시물 삭제 권한이 없습니다.");
