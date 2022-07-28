@@ -12,12 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.*;
 
 
 @Service
 public class ContentService {
-
     private final ContentRepository contentRepository;
     private final CategoryRepository categoryRepository;
     private final LikeRepository likeRepository;
@@ -103,12 +104,10 @@ public class ContentService {
             if(like.isEmpty()){
                 logger.error("isempty");
                 userLike = new Like(content, user);
-                //likeRepository.save(new Like(content, user));
             }
             else if(like.get().getStatus() == StatusEnum.ACTIVE){
                 userLike = like.get();
                 userLike.setStatus(StatusEnum.DELETED);
-                //likeRepository.save(like.get());
             }
             else if(like.get().getStatus() == StatusEnum.DELETED){
                 userLike = like.get();
@@ -122,14 +121,11 @@ public class ContentService {
         return likeRepository.save(userLike).getContent();
     }
 
-
     public void deleteContent(Long contentId, User user) {
         Content content = contentRepository.findById(contentId)
                 .orElseThrow(()->new IllegalArgumentException("콘텐츠가 없습니다."));
 
         if(content.getUser().getId().equals(user.getId())){
-            //content.setDeleted();
-            //contentRepository.save(content);
             contentRepository.deleteById(contentId);
         }
         else {
