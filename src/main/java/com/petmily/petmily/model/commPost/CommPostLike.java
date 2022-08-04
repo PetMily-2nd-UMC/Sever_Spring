@@ -9,7 +9,6 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@DynamicInsert
 @Entity
 public class CommPostLike {
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,7 +20,6 @@ public class CommPostLike {
 
     @Column(nullable = false)
     private String likedAt;
-
 
 
     @Builder

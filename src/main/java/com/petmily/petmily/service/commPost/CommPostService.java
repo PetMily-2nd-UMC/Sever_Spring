@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CommPostService {
@@ -41,15 +40,24 @@ public class CommPostService {
         return commPostRepository.findAll();
     }
 
-    public CommPost updatePost(CommPostReq requestDto) {
-        for (CommPostComment comment : requestDto.getComments()){ commentRepository.save(comment); }
-        for (CommPostLike like : requestDto.getLikes()){ likeRepository.save(like); }
-        return commPostRepository.save(requestDto.toEntity());
+    public CommPost updatePost(Long postId, CommPostReq requestDto) {
+        CommPost commPost = commPostRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("게시물이 없습니다"));
+
+        commPost.setTitle(requestDto.getTitle());
+        commPost.setContent(requestDto.getContent());
+        commPost.setImgs(requestDto.getImgs());
+
+        commPostRepository.save(commPost);
+        return commPost;
     }
 
-    public CommPost deletePost(CommPostReq requestDto) {
-        CommPost commPost = requestDto.toEntity();
-        commPostRepository.delete(commPost);
+    public CommPost deletePost(Long postId) {
+        System.out.println("postId = " + postId);
+        CommPost commPost = commPostRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("게시물이 없습니다"));
+
+        commPostRepository.deleteById(postId);
         return commPost;
     }
 

@@ -1,9 +1,7 @@
 package com.petmily.petmily.model.commPost;
 
-import com.petmily.petmily.model.User;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 import java.util.List;
@@ -12,16 +10,11 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@DynamicInsert
 @Entity
 public class CommPost {
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Id
-    private Long postId;
 
-    @ManyToOne
-    @JoinColumn(name = "userId")
-    private User user;
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     @Column(nullable = false)
     @ColumnDefault("false")

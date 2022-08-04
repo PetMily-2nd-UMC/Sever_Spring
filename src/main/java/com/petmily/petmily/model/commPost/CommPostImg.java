@@ -9,7 +9,6 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@DynamicInsert
 @Entity
 public class CommPostImg {
     @GeneratedValue(strategy = GenerationType.AUTO)
