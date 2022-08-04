@@ -26,10 +26,25 @@ public class Result <T> {
                 .body(Result.builder()
                 .status(resultCode.getHttpStatus().value())
                 .result(resultCode.getHttpStatus())
-                .code(resultCode.name())
+                                .code(resultCode.name())
                 .message(resultCode.getDetail())
                 .build()
                 );
+    }
+
+
+    public static <T>ResponseEntity<Result<T>> toResult(ResultCode resultCode, T data){
+        return ResponseEntity
+                .status(resultCode.getHttpStatus())
+                .body(Result.<T>builder()
+                        .status(resultCode.getHttpStatus().value())
+                        .code(resultCode.name())
+                        .result(resultCode.getHttpStatus())
+                        .message(resultCode.getDetail())
+                        .data(data)
+                        .build()
+                );
+
     }
 
 }
