@@ -1,20 +1,23 @@
 package com.petmily.petmily.dto.commPost;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.petmily.petmily.model.commPost.CommPost;
-import com.petmily.petmily.model.commPost.CommPostComment;
 import com.petmily.petmily.model.commPost.CommPostImg;
-import com.petmily.petmily.model.commPost.CommPostLike;
 import lombok.*;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
-@Setter
+@Builder
 @Getter
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@AllArgsConstructor
 @NoArgsConstructor
 public class CommPostReq {
 
-    private Long postId;
+    private Long id;
     private String nickname;
     private String profileUrl;
     private boolean _isMyPost;
@@ -25,10 +28,14 @@ public class CommPostReq {
     private String content;
     private int likeCount;
     private int commentCount;
+
+    private LocalDateTime createdAt;
+
     private List<CommPostImg> imgs;
 
-    private List<CommPostComment> comments;
-    private List<CommPostLike> likes;
+//    private List<CommPostComment> comments;
+//    private List<CommPostLike> likes;
+
 
 
     public CommPost toEntity(){
@@ -42,10 +49,27 @@ public class CommPostReq {
                 .commentCount(commentCount)
                 ._isLiked(_isLiked)
                 .imgs(imgs)
-                .comments(comments)
-                .likes(likes)
+//                .comments(comments)
+//                .likes(likes)
+                .createdAt(createdAt)
                 .build();
         return commPost;
     }
+
+    public CommPostReq makeResponse(CommPost post){
+        return CommPostReq.builder()
+                .id(post.getId())
+                .title(post.getTitle())
+                .content(post.getContent())
+                .imgs(post.getImgs())
+                .likeCount(post.getLikeCount())
+                .commentCount(post.getCommentCount())
+//                .likes(post.getLikes())
+//                .comments(post.getComments())
+                .profileUrl(post.getProfileUrl())
+                .createdAt(post.getCreatedAt())
+                .build();
+    }
+
 
 }

@@ -1,6 +1,7 @@
 package com.petmily.petmily.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.petmily.petmily.dto.commPost.CommPostReq;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,8 +17,6 @@ import java.util.List;
 public class TopPostDto {
 
     private List<ContentDto> contents;
-
-    //초니님 형식에 맞게 아래 리스트 수정해주세요.
-    //private List<CommPost> tmps;
+    private List<CommPostReq> commPosts;
 
 }
