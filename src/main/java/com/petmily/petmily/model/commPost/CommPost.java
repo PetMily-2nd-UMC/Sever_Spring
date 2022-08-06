@@ -2,7 +2,9 @@ package com.petmily.petmily.model.commPost;
 
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+
 import org.hibernate.annotations.CreationTimestamp;
+
 
 import javax.persistence.*;
 import java.sql.Timestamp;
