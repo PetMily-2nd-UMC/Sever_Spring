@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@DynamicInsert
 @Entity
 public class CommPostComment {
     @GeneratedValue(strategy = GenerationType.AUTO)
