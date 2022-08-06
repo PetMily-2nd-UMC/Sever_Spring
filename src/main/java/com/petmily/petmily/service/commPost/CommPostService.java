@@ -27,12 +27,12 @@ public class CommPostService {
     }
 
     public CommPost createPost(CommPostReq requestDto){
-        if(requestDto.getComments() != null) {
-            for (CommPostComment comment : requestDto.getComments()) { commentRepository.save(comment);}
-        }
-        if(requestDto.getLikes() != null) {
-            for (CommPostLike like : requestDto.getLikes()){ likeRepository.save(like); }
-        }
+//        if(requestDto.getComments() != null) {
+//            for (CommPostComment comment : requestDto.getComments()) { commentRepository.save(comment);}
+//        }
+//        if(requestDto.getLikes() != null) {
+//            for (CommPostLike like : requestDto.getLikes()){ likeRepository.save(like); }
+//        }
         return commPostRepository.save(requestDto.toEntity());
     }
 

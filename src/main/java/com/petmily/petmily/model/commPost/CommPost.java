@@ -3,7 +3,12 @@ package com.petmily.petmily.model.commPost;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
+import org.hibernate.annotations.CreationTimestamp;
+
+
 import javax.persistence.*;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Setter
@@ -45,37 +50,41 @@ public class CommPost {
     @ColumnDefault("false")
     private boolean _isLiked;
 
-    @Column(nullable = true)
-    @ColumnDefault("null")
-    @OneToMany
-    private List<CommPostImg> imgs;  // private List<CommPostImgReq> imgs;
-
+    @CreationTimestamp
+    private LocalDateTime createdAt;
 
     @Column(nullable = true)
     @ColumnDefault("null")
     @OneToMany
-    private List<CommPostComment> comments;
+    private List<CommPostImg> imgs;
 
-    @Column(nullable = true)
-    @ColumnDefault("null")
-    @OneToMany
-    private List<CommPostLike> likes;
+
+//    @Column(nullable = true)
+//    @ColumnDefault("null")
+//    @OneToMany
+//    private List<CommPostComment> comments;
+//
+//    @Column(nullable = true)
+//    @ColumnDefault("null")
+//    @OneToMany
+//    private List<CommPostLike> likes;
 
 
     @Builder
     public CommPost(boolean _isMyPost, String profileUrl, boolean _isBookmarked, String title, String content,
-                    int commentCount, int likeCount, boolean _isLiked, List<CommPostImg> imgs,
-                    List<CommPostComment> comments, List<CommPostLike> likes) {
+                    int commentCount, int likeCount, boolean _isLiked, LocalDateTime createdAt, List<CommPostImg> imgs){
+//                    List<CommPostComment> comments, List<CommPostLike> likes) {
         this._isMyPost = _isMyPost;
         this.profileUrl = profileUrl;
         this._isBookmarked = _isBookmarked;
         this.title = title;
         this.content = content;
-        this.commentCount = comments != null ? comments.size() : 0;
-        this.likeCount = likes != null ? likes.size() : 0;
+        this.commentCount = commentCount;
+        this.likeCount = likeCount;
         this._isLiked = _isLiked;
+        this.createdAt = createdAt;
         this.imgs = imgs;
-        this.comments = comments;
-        this.likes = likes;
+//        this.comments = comments;
+//        this.likes = likes;
     }
 }
