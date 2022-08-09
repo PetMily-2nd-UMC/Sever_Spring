@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.petmily.petmily.config.JwtProvider;
+import com.petmily.petmily.dto.LoginEnum;
 import com.petmily.petmily.dto.SocialUserDto;
 import com.petmily.petmily.dto.TokenDto;
 import com.petmily.petmily.model.User;
@@ -71,7 +72,7 @@ public class NaverUserService {
             String imgurl = null;
             UserRoleEnum role = UserRoleEnum.USER;
 
-            naverUser = new User(email, passwordEncoder.encode(password), nickname, imgurl, role);
+            naverUser = new User(email, passwordEncoder.encode(password), nickname, imgurl, role, LoginEnum.Naver);
 
             return userRepository.save(naverUser);
         }
@@ -117,7 +118,7 @@ public class NaverUserService {
         String responseBody = response.getBody();
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
-        System.out.println(jsonNode.toString());
+        //System.out.println(jsonNode.toString());
         String email = jsonNode.get("response").get("email").asText();
         String nickname = jsonNode.get("response").get("nickname").asText();
         String imgUrl = jsonNode.get("response").get("profile_image").asText();

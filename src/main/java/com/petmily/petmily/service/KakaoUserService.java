@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.petmily.petmily.config.JwtProvider;
+import com.petmily.petmily.dto.LoginEnum;
 import com.petmily.petmily.dto.SocialUserDto;
 import com.petmily.petmily.dto.TokenDto;
 import com.petmily.petmily.model.User;
@@ -61,7 +62,7 @@ public class KakaoUserService {
             String imgurl = null;
             UserRoleEnum role = UserRoleEnum.USER;
 
-            kakaoUser = new User(email, passwordEncoder.encode(password), nickname, imgurl, role);
+            kakaoUser = new User(email, passwordEncoder.encode(password), nickname, imgurl, role, LoginEnum.Kakao);
 
             return userRepository.save(kakaoUser);
         }

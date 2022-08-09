@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.petmily.petmily.config.JwtProvider;
+import com.petmily.petmily.dto.LoginEnum;
 import com.petmily.petmily.dto.SocialUserDto;
 import com.petmily.petmily.dto.TokenDto;
 import com.petmily.petmily.model.User;
@@ -22,8 +23,6 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import java.net.URI;
 import java.util.UUID;
 
 @Service
@@ -32,11 +31,11 @@ public class GoogleUserService {
     private final UserRepository userRepository;
     private final JwtProvider jwtProvider;
     private final String clientId;
-
     private final String clientSecret;
 
     @Autowired
-    public GoogleUserService(PasswordEncoder passwordEncoder, UserRepository userRepository, JwtProvider jwtProvider, @Value("${oauth2.google.client-id}") String clientId, @Value("${oauth2.google.client-secret}") String clientSecret) {
+    public GoogleUserService(PasswordEncoder passwordEncoder, UserRepository userRepository, JwtProvider jwtProvider,
+                             @Value("${oauth2.google.client-id}") String clientId, @Value("${oauth2.google.client-secret}") String clientSecret) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.jwtProvider = jwtProvider;
@@ -56,25 +55,27 @@ public class GoogleUserService {
 
     }
 
-    private User registerGoogleUserIfNeeded(SocialUserDto googleUserInfo) {
+    private User registerGoogleUserIfNeeded(SocialUserDto userInfo) {
 
-        String email = googleUserInfo.getEmail();
-        User googleUser = userRepository.findByEmail(email)
+        String email = userInfo.getEmail();
+        User user = userRepository.findByEmail(email)
                 .orElse(null);
 
-        if(googleUser == null){
+        if(user == null){
             String password = UUID.randomUUID().toString();
-            String nickname = googleUserInfo.getNickname();
+            String nickname = userInfo.getNickname();
             String imgurl = null;
             UserRoleEnum role = UserRoleEnum.USER;
 
-            googleUser = new User(email, passwordEncoder.encode(password), nickname, imgurl, role);
+            user = new User(email, passwordEncoder.encode(password), nickname, imgurl, role, LoginEnum.Google);
 
-            return userRepository.save(googleUser);
+            return userRepository.save(user);
         }
 
-        return googleUser;
+        return user;
+
     }
+
 
     public String getAccessToken(String code) throws JsonProcessingException {
         HttpHeaders headers = new HttpHeaders();

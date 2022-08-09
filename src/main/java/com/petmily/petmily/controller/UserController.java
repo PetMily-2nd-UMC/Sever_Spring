@@ -70,13 +70,6 @@ public class UserController {
         return "login";
     }
 
-    /*
-    @GetMapping("/test")
-    public String getMappingTest(@RequestParam String id, @RequestParam String name) {
-        return "ID : " + id + ", NAME : " + name;
-    }
-    */
-
 
 }
 

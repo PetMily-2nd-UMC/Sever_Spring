@@ -1,6 +1,7 @@
 package com.petmily.petmily.service;
 
 import com.petmily.petmily.config.JwtProvider;
+import com.petmily.petmily.dto.LoginEnum;
 import com.petmily.petmily.dto.LoginReq;
 import com.petmily.petmily.dto.SignupReq;
 import com.petmily.petmily.dto.TokenDto;
@@ -45,7 +46,7 @@ public class UserService {
             role = UserRoleEnum.ADMIN;
         }
 
-        User user = new User(email, password, nickname, imgurl, role);
+        User user = new User(email, password, nickname, imgurl, role, LoginEnum.General);
         return userRepository.save(user);
     }
 
