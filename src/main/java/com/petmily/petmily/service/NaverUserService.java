@@ -23,93 +23,108 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.util.UUID;
 
 @Service
-public class KakaoUserService {
+public class NaverUserService {
+
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final JwtProvider jwtProvider;
+
     private final String clientId;
 
-    private static final Logger logger = LoggerFactory.getLogger(KakaoUserService.class);
+    private final String clientSecret;
+
+    private static final Logger logger = LoggerFactory.getLogger(NaverUserService.class);
 
     @Autowired
-    public KakaoUserService(PasswordEncoder passwordEncoder, UserRepository userRepository, JwtProvider jwtProvider, @Value("${oauth2.kakao.client-id}") String clientId) {
+    public NaverUserService(PasswordEncoder passwordEncoder, UserRepository userRepository, JwtProvider jwtProvider, @Value("${oauth2.naver.client-id}") String clientId, @Value("${oauth2.naver.client-secret}") String clientSecret) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.jwtProvider = jwtProvider;
         this.clientId = clientId;
+        this.clientSecret = clientSecret;
     }
 
-    public TokenDto loginUser(String code) throws JsonProcessingException {
-        String accessToken = getAccessToken(code);
-        SocialUserDto kakaoUserInfo = getKakaoUserInfo(accessToken);
-        User kakaoUser = registerKakaoUserIfNeeded(kakaoUserInfo);
+    public TokenDto loginUser(String code, String state) throws JsonProcessingException {
+        String accessToken = getAccessToken(code, state);
 
-        return jwtProvider.generateToken(kakaoUser.getEmail());
+        SocialUserDto naverUserInfo = getNaverUserInfo(accessToken);
+
+        User naverUser = registerNaverUserIfNeeded(naverUserInfo);
+
+        return jwtProvider.generateToken(naverUser.getEmail());
     }
 
-    private User registerKakaoUserIfNeeded(SocialUserDto kakaoUserInfo) {
-        String email = kakaoUserInfo.getEmail();
-        User kakaoUser = userRepository.findByEmail(email)
+    private User registerNaverUserIfNeeded(SocialUserDto naverUserInfo) {
+
+        String email = naverUserInfo.getEmail();
+        User naverUser = userRepository.findByEmail(email)
                 .orElse(null);
 
-        if(kakaoUser == null){
+        if(naverUser == null){
             String password = UUID.randomUUID().toString();
-            String nickname = kakaoUserInfo.getNickname();
+            String nickname = naverUserInfo.getNickname();
             String imgurl = null;
             UserRoleEnum role = UserRoleEnum.USER;
 
-            kakaoUser = new User(email, passwordEncoder.encode(password), nickname, imgurl, role);
+            naverUser = new User(email, passwordEncoder.encode(password), nickname, imgurl, role);
 
-            return userRepository.save(kakaoUser);
+            return userRepository.save(naverUser);
         }
 
-        return kakaoUser;
+        return naverUser;
     }
 
-    private String getAccessToken(String code) throws JsonProcessingException {
+    private String getAccessToken(String code, String state) throws JsonProcessingException {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-type","application/x-www-form-urlencoded;charset=utf-8");
 
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type","authorization_code");
         body.add("client_id",clientId);
-        body.add("redirect_uri","http://localhost:8080/user/kakao");
+        body.add("client_secret",clientSecret);
+        body.add("redirect_uri","http://localhost:8080/user/naver");
         body.add("code",code);
+        body.add("state",state);
 
-        HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new HttpEntity<>(body, headers);
+        HttpEntity<MultiValueMap<String, String>> naverTokenRequest = new HttpEntity<>(body, headers);
         RestTemplate template = new RestTemplate();
-        ResponseEntity<String> response = template.exchange("https://kauth.kakao.com/oauth/token",
-                HttpMethod.POST, kakaoTokenRequest, String.class);
+        ResponseEntity<String> response = template.exchange("https://nid.naver.com/oauth2.0/token",
+                HttpMethod.POST, naverTokenRequest, String.class);
 
         String responseBody = response.getBody();
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
 
         return jsonNode.get("access_token").asText();
+
     }
 
-    private SocialUserDto getKakaoUserInfo(String accessToken) throws JsonProcessingException {
+    private SocialUserDto getNaverUserInfo(String accessToken) throws JsonProcessingException {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer "+accessToken);
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
-        HttpEntity<MultiValueMap<String, String>> kakaoUserInfoRequest = new HttpEntity<>(headers);
+        HttpEntity<MultiValueMap<String, String>> naverUserInfoRequest = new HttpEntity<>(headers);
         RestTemplate template = new RestTemplate();
-        ResponseEntity<String> response = template.exchange("https://kapi.kakao.com/v2/user/me",
-                HttpMethod.POST, kakaoUserInfoRequest, String.class);
+        ResponseEntity<String> response = template.exchange("https://openapi.naver.com/v1/nid/me",
+                HttpMethod.POST, naverUserInfoRequest, String.class);
 
         String responseBody = response.getBody();
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
-        //logger.error(jsonNode.toString());
-        String email = jsonNode.get("kakao_account").get("email").asText();
-        String nickname = jsonNode.get("properties").get("nickname").asText();
-        String imgUrl = jsonNode.get("properties").get("profile_image").asText();
+        System.out.println(jsonNode.toString());
+        String email = jsonNode.get("response").get("email").asText();
+        String nickname = jsonNode.get("response").get("nickname").asText();
+        String imgUrl = jsonNode.get("response").get("profile_image").asText();
 
 
         return new SocialUserDto(email, nickname);
+
     }
+
 }

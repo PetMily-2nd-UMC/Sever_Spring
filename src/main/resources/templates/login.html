@@ -4,8 +4,11 @@
     <title>Insert title here</title>
 </head>
 <body>
-<a class="p-2" href="https://kauth.kakao.com/oauth/authorize?client_id=3b32c7672742d51e5d4717c412ab2213&redirect_uri=http://localhost:8080/user/kakao&response_type=code">
+<a class="kakao" href="https://kauth.kakao.com/oauth/authorize?client_id=3b32c7672742d51e5d4717c412ab2213&redirect_uri=http://localhost:8080/user/kakao&response_type=code">
     <img th:src="@{/images/kakao_login_medium_narrow.png}" style="height:60px"/>
+</a>
+<a class="naver" href="https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=Lw6KfsCCldgfh49ltpXP&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fuser%2Fnaver&state=79sjos7ar1v8g3ngfnpcjqg94k">
+    <img th:src="@{/images/naver_btn.png}" style="height:60px"/>
 </a>
 </body>
 </html>

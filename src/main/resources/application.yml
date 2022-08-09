@@ -21,3 +21,11 @@ spring:
 jwt:
   secret: HADEN
   admin:  isadmin
+
+oauth2:
+  kakao:
+    client-id: 3b32c7672742d51e5d4717c412ab2213
+  naver:
+    client-id: Lw6KfsCCldgfh49ltpXP
+    client-secret: Mk5xaPEOI9
+

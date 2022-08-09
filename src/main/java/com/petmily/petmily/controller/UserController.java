@@ -5,6 +5,7 @@ import com.petmily.petmily.dto.LoginReq;
 import com.petmily.petmily.dto.SignupReq;
 import com.petmily.petmily.dto.TokenDto;
 import com.petmily.petmily.service.KakaoUserService;
+import com.petmily.petmily.service.NaverUserService;
 import com.petmily.petmily.service.UserService;
 import com.petmily.petmily.util.Result;
 import com.petmily.petmily.util.ResultCode;
@@ -20,10 +21,13 @@ public class UserController {
 
     private final KakaoUserService kakaoUserService;
 
+    private final NaverUserService naverUserService;
+
     @Autowired
-    public UserController(UserService userService, KakaoUserService kakaoUserService) {
+    public UserController(UserService userService, KakaoUserService kakaoUserService, NaverUserService naverUserService) {
         this.userService = userService;
         this.kakaoUserService = kakaoUserService;
+        this.naverUserService = naverUserService;
     }
 
     @PostMapping("/signup")
@@ -41,14 +45,18 @@ public class UserController {
     @GetMapping("/kakao")
     public ResponseEntity<Result<TokenDto>> kakaoLoginUser(@RequestParam String code) throws JsonProcessingException {
         TokenDto tokenDto = kakaoUserService.loginUser(code);
-        System.out.println("code = " + code);
-        System.out.println("dto = " + tokenDto.getAccessToken());
-        System.out.println("dto = " + tokenDto.getRefreshToken());
+        return Result.toResult(ResultCode.LOGIN_SUCCESS, tokenDto);
+    }
+
+    @GetMapping("/naver")
+    public ResponseEntity<Result<TokenDto>> naverLoginUser(@RequestParam(value = "code") String code, @RequestParam(value = "state") String state) throws JsonProcessingException {
+        TokenDto tokenDto = naverUserService.loginUser(code, state);
         return Result.toResult(ResultCode.LOGIN_SUCCESS, tokenDto);
     }
 
     @GetMapping("/do")
     public String test() {
+        //79sjos7ar1v8g3ngfnpcjqg94k
         return "login";
     }
 
