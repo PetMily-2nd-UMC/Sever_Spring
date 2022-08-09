@@ -1,23 +1,29 @@
 package com.petmily.petmily.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.petmily.petmily.dto.LoginReq;
 import com.petmily.petmily.dto.SignupReq;
 import com.petmily.petmily.dto.TokenDto;
+import com.petmily.petmily.service.KakaoUserService;
 import com.petmily.petmily.service.UserService;
 import com.petmily.petmily.util.Result;
 import com.petmily.petmily.util.ResultCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
+@Controller
 @RequestMapping("/user")
 public class UserController {
     private final UserService userService;
 
+    private final KakaoUserService kakaoUserService;
+
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, KakaoUserService kakaoUserService) {
         this.userService = userService;
+        this.kakaoUserService = kakaoUserService;
     }
 
     @PostMapping("/signup")
@@ -30,6 +36,20 @@ public class UserController {
     public ResponseEntity<Result<TokenDto>> loginUser(@RequestBody LoginReq requestDto){
         TokenDto tokenDto = userService.loginUser(requestDto);
         return Result.toResult(ResultCode.LOGIN_SUCCESS, tokenDto);
+    }
+
+    @GetMapping("/kakao")
+    public ResponseEntity<Result<TokenDto>> kakaoLoginUser(@RequestParam String code) throws JsonProcessingException {
+        TokenDto tokenDto = kakaoUserService.loginUser(code);
+        System.out.println("code = " + code);
+        System.out.println("dto = " + tokenDto.getAccessToken());
+        System.out.println("dto = " + tokenDto.getRefreshToken());
+        return Result.toResult(ResultCode.LOGIN_SUCCESS, tokenDto);
+    }
+
+    @GetMapping("/do")
+    public String test() {
+        return "login";
     }
 
     /*

@@ -7,11 +7,15 @@ spring:
     url: jdbc:h2:mem:mydb
     username: sa
     password:
-  jap:
+  jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
+        #dialect: org.hibernate.dialect.H2Dialect
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        format_sql: true
+    hibernate:
+      ddl-auto: update
   admin: isadmin
 
 jwt:
