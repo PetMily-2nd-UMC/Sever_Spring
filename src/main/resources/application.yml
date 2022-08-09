@@ -28,4 +28,7 @@ oauth2:
   naver:
     client-id: Lw6KfsCCldgfh49ltpXP
     client-secret: Mk5xaPEOI9
+  google:
+    client-id: 467086868237-hnopn0f581mh86s5qshj1l6s3hoid67b.apps.googleusercontent.com
+    client-secret: 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
 

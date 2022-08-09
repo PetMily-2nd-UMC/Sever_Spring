@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.petmily.petmily.dto.LoginReq;
 import com.petmily.petmily.dto.SignupReq;
 import com.petmily.petmily.dto.TokenDto;
+import com.petmily.petmily.service.GoogleUserService;
 import com.petmily.petmily.service.KakaoUserService;
 import com.petmily.petmily.service.NaverUserService;
 import com.petmily.petmily.service.UserService;
@@ -23,11 +24,14 @@ public class UserController {
 
     private final NaverUserService naverUserService;
 
+    private final GoogleUserService googleUserService;
+
     @Autowired
-    public UserController(UserService userService, KakaoUserService kakaoUserService, NaverUserService naverUserService) {
+    public UserController(UserService userService, KakaoUserService kakaoUserService, NaverUserService naverUserService, GoogleUserService googleUserService) {
         this.userService = userService;
         this.kakaoUserService = kakaoUserService;
         this.naverUserService = naverUserService;
+        this.googleUserService = googleUserService;
     }
 
     @PostMapping("/signup")
@@ -54,9 +58,15 @@ public class UserController {
         return Result.toResult(ResultCode.LOGIN_SUCCESS, tokenDto);
     }
 
+
+    @GetMapping("/google")
+    public ResponseEntity<Result<TokenDto>> getGoogleAccessToken(@RequestParam String code) throws JsonProcessingException {
+        TokenDto tokenDto = googleUserService.loginUser(code);
+        return Result.toResult(ResultCode.LOGIN_SUCCESS, tokenDto);
+    }
+
     @GetMapping("/do")
     public String test() {
-        //79sjos7ar1v8g3ngfnpcjqg94k
         return "login";
     }
 
