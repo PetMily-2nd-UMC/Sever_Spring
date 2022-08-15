@@ -62,7 +62,7 @@ public class KakaoUserService {
             String imgurl = null;
             UserRoleEnum role = UserRoleEnum.USER;
 
-            kakaoUser = new User(email, passwordEncoder.encode(password), nickname, imgurl, role, LoginEnum.Kakao);
+            kakaoUser = new User(email, passwordEncoder.encode(password), nickname, role, LoginEnum.Kakao);
 
             return userRepository.save(kakaoUser);
         }

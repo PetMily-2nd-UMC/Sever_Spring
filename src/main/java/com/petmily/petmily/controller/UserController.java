@@ -35,7 +35,7 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<Result> registerUser(@RequestBody SignupReq requestDto){
+    public ResponseEntity<Result> registerUser(@ModelAttribute SignupReq requestDto){
         userService.registerUser(requestDto);
         return Result.toResult(ResultCode.SIGNUP_SUCCESS);
     }

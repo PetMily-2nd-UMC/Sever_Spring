@@ -1,0 +1,14 @@
+cloud:
+  aws:
+    credentials:
+      accessKey: YOUR_SECRET_KEY
+      secretKey: YOUR_SECRET_KEY
+    s3:
+      bucket: petmilyarchive
+      folder:
+        community: community/
+        content: content/
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false

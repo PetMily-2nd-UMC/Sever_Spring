@@ -1,8 +1,10 @@
 package com.petmily.petmily.util;
 
+import com.petmily.petmily.dto.LoginEnum;
 import com.petmily.petmily.model.*;
 import com.petmily.petmily.repository.CategoryRepository;
 import com.petmily.petmily.repository.ContentRepository;
+import com.petmily.petmily.repository.LikeRepository;
 import com.petmily.petmily.repository.UserRepository;
 import com.petmily.petmily.service.ContentService;
 import com.petmily.petmily.service.UserService;
@@ -28,6 +30,9 @@ public class StartRunner implements ApplicationRunner {
     ContentRepository contentRepository;
 
     @Autowired
+    LikeRepository likeRepository;
+
+    @Autowired
     PasswordEncoder passwordEncoder;
 
     @Autowired
@@ -36,10 +41,16 @@ public class StartRunner implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
-        User testUser = new User("odie@gmail.com", passwordEncoder.encode("1234"),"odie", null, UserRoleEnum.USER);
-        User testUser2 = new User("odie1@gmail.com", passwordEncoder.encode("1234"),"odie1", null, UserRoleEnum.USER);
+        User testUser = new User("odie@gmail.com", passwordEncoder.encode("1234"),"odie",  UserRoleEnum.USER, LoginEnum.General);
+        User testUser2 = new User("odie1@gmail.com", passwordEncoder.encode("1234"),"odie1", UserRoleEnum.USER, LoginEnum.General);
+        User testUser3 = new User("odie3@gmail.com", passwordEncoder.encode("1234"),"odie2", UserRoleEnum.USER, LoginEnum.General);
+        User testUser4 = new User("odie4@gmail.com", passwordEncoder.encode("1234"),"odie3",  UserRoleEnum.USER, LoginEnum.General);
+        User testUser5 = new User("odie5@gmail.com", passwordEncoder.encode("1234"),"odie4", UserRoleEnum.USER, LoginEnum.General);
         userRepository.save(testUser);
         userRepository.save(testUser2);
+        userRepository.save(testUser3);
+        userRepository.save(testUser4);
+        userRepository.save(testUser5);
 
 
         Category category1 = new Category(CategoryEnum.DOG);
@@ -56,13 +67,6 @@ public class StartRunner implements ApplicationRunner {
         categoryRepository.save(category5);
         categoryRepository.save(category6);
 
-
-        /*Category category = categoryRepository.findById(2L)
-                .orElseThrow(()->new IllegalArgumentException("카테고리가 없습니다."));*/
-
-
-        Content content1 = new Content("테스트타이틀","테스트콘텐츠",null,category2,testUser);
-        contentRepository.save(content1);
 
     }
 }

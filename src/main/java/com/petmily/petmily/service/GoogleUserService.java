@@ -67,7 +67,7 @@ public class GoogleUserService {
             String imgurl = null;
             UserRoleEnum role = UserRoleEnum.USER;
 
-            user = new User(email, passwordEncoder.encode(password), nickname, imgurl, role, LoginEnum.Google);
+            user = new User(email, passwordEncoder.encode(password), nickname, role, LoginEnum.Google);
 
             return userRepository.save(user);
         }
