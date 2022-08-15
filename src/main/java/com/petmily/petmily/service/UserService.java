@@ -1,6 +1,7 @@
 package com.petmily.petmily.service;
 
 import com.petmily.petmily.config.JwtProvider;
+import com.petmily.petmily.dto.LoginEnum;
 import com.petmily.petmily.dto.LoginReq;
 import com.petmily.petmily.dto.SignupReq;
 import com.petmily.petmily.dto.TokenDto;
@@ -33,19 +34,19 @@ public class UserService {
     }
 
     public User registerUser(SignupReq requestDto) {
-        String username = requestDto.getEmail();
+        String email = requestDto.getEmail();
         String password = passwordEncoder.encode(requestDto.getPassword());
         String nickname = requestDto.getNickname();
         String imgurl = requestDto.getImgUrl();
         UserRoleEnum role = UserRoleEnum.USER;
-        logger.error("registeruser: "+username);
+        logger.error("registeruser: "+email);
 
         if(requestDto.isAdmin()){
             //나중에 수정
             role = UserRoleEnum.ADMIN;
         }
 
-        User user = new User(username, password, nickname, imgurl, role);
+        User user = new User(email, password, nickname, imgurl, role, LoginEnum.General);
         return userRepository.save(user);
     }
 

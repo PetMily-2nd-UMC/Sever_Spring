@@ -31,12 +31,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web){
         web
                 .ignoring()
-                .antMatchers("/h2-console/**");
+                .antMatchers("/h2-console/**")
+                .antMatchers("/css/**")
+                .antMatchers("/fonts/**")
+                .antMatchers("/images/**");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable();
+        http.csrf().disable()
+                .cors().disable();
 
         http.authorizeRequests()
                 .antMatchers("/user/**").permitAll()
@@ -44,7 +48,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticated()
 
                 .and()
-                //.addFilterBefore(new JwtFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling()
                 .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
 

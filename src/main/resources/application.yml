@@ -7,13 +7,28 @@ spring:
     url: jdbc:h2:mem:mydb
     username: sa
     password:
-  jap:
+  jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
+        #dialect: org.hibernate.dialect.H2Dialect
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        format_sql: true
+    hibernate:
+      ddl-auto: update
   admin: isadmin
 
 jwt:
   secret: HADEN
   admin:  isadmin
+
+oauth2:
+  kakao:
+    client-id: 3b32c7672742d51e5d4717c412ab2213
+  naver:
+    client-id: Lw6KfsCCldgfh49ltpXP
+    client-secret: Mk5xaPEOI9
+  google:
+    client-id: 467086868237-hnopn0f581mh86s5qshj1l6s3hoid67b.apps.googleusercontent.com
+    client-secret: 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
+

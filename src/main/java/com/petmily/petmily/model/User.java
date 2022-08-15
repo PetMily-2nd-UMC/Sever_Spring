@@ -1,5 +1,6 @@
 package com.petmily.petmily.model;
 
+import com.petmily.petmily.dto.LoginEnum;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -33,6 +34,11 @@ public class User implements UserDetails {
 
     @Column(nullable = false)
     private UserRoleEnum role;
+
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private LoginEnum login;
 
 
     @CreationTimestamp
@@ -80,12 +86,15 @@ public class User implements UserDetails {
         return email;
     }
 
-    public User(String email, String passWord, String nickName, String profileUrl, UserRoleEnum role) {
+    public User(String email, String passWord, String nickName, String profileUrl, UserRoleEnum role, LoginEnum login) {
         this.email = email;
         this.passWord = passWord;
         this.nickName = nickName;
         this.profileUrl = profileUrl;
         this.role = role;
+        this.login = login;
     }
+
+
 
 }
