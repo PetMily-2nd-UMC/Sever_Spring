@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Formula;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -27,10 +28,10 @@ public class Comment {
     private String text;
 
     @CreationTimestamp
+    @Column(updatable = false)
     private Timestamp createDate;
 
-    @CreationTimestamp
-    @Column(nullable = true)
+    @UpdateTimestamp
     private Timestamp updateDate;
 
     @Enumerated(EnumType.STRING)

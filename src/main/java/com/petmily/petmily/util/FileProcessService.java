@@ -1,7 +1,7 @@
 package com.petmily.petmily.util;
 
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.petmily.petmily.dto.ServiceCategory;
+import com.petmily.petmily.model.ServiceCategory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

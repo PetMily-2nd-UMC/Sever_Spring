@@ -30,7 +30,7 @@ public class ContentController {
     //정보 게시물 작성
     @PostMapping("/write/{categoryId}")
     public ResponseEntity<Result<ContentDto>> createContent(@PathVariable Long categoryId,
-                                                @RequestBody ContentReq requestDto,
+                                                @ModelAttribute ContentReq requestDto,
                                                 @AuthenticationPrincipal User user){
         //logger.error("createContent");
         Content content = contentService.createContent(categoryId, user, requestDto);
@@ -42,7 +42,7 @@ public class ContentController {
     //정보 게시물 수정하기
     @PostMapping("/modify/{contentId}")
     public ResponseEntity<Result<ContentDto>> modifyContent(@PathVariable Long contentId,
-                                                            @RequestBody ContentReq requestDto,
+                                                            @ModelAttribute ContentReq requestDto,
                                                             @AuthenticationPrincipal User user){
 
         Content content = contentService.modifyContent(contentId, user, requestDto);
