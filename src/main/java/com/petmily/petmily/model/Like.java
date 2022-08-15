@@ -24,8 +24,12 @@ public class Like {
     private Timestamp createDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "content_id", nullable = false)
+    @JoinColumn(name = "content_id", nullable = true)
     private Content content;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "comment_id", nullable = true)
+    private Comment comment;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -33,6 +37,12 @@ public class Like {
 
     public Like(Content content, User user) {
         this.content = content;
+        this.user = user;
+        this.status = StatusEnum.ACTIVE;
+    }
+
+    public Like(Comment comment, User user) {
+        this.comment = comment;
         this.user = user;
         this.status = StatusEnum.ACTIVE;
     }

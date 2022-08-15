@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Getter
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -16,6 +18,8 @@ import lombok.NoArgsConstructor;
 public class CommentDto {
     private Long id;
     private String text;
+    private Integer likeCount;
+    private Integer commentCount;
     private String createdate;
     //private Long contentid;
     private Long userid;
