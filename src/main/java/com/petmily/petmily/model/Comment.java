@@ -28,7 +28,6 @@ public class Comment {
     private String text;
 
     @CreationTimestamp
-    @Column(updatable = false)
     private Timestamp createDate;
 
     @UpdateTimestamp
@@ -40,6 +39,10 @@ public class Comment {
     @Formula("(select count(1) from Likecontent l where l.comment_id = id and l.status = 'ACTIVE')")
     private Integer likeCount;
 
+
+    @Formula("(select count(1) from Comment c where c.mommy_id = id and c.status = 'ACTIVE')")
+    private Integer commentCount;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "content_id", nullable = false)
     private Content content;
@@ -49,6 +52,7 @@ public class Comment {
     private Comment mommyComment;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private LevelEnum isMommy;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -9,11 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class CommentService {
@@ -45,32 +43,35 @@ public class CommentService {
         return list;
     }
 
+    @Transactional
     public List<CommentDto> createComment(Long contentId, User user, String text) {
         Content content = contentRepository.findById(contentId)
                 .orElseThrow(()->new IllegalArgumentException("컨텐츠가 없습니다."));
-
         commentRepository.save(new Comment(text, content, user));
 
-        Set<Comment> commentSet = commentRepository.findByContentId(contentId);
+        Set<Comment> commentSet = commentRepository.findByContentAndAndIsMommyOrderByIdAsc(content, LevelEnum.Y);
 
         return getCommentList(commentSet);
     }
 
+    @Transactional
     public List<CommentDto> createReComment(Long commentId, User user, String text) {
 
-        Comment comment = commentRepository.findActiveComment(commentId)
+        Comment comment = commentRepository.findByIdAndStatus(commentId, StatusEnum.ACTIVE)
                 .orElseThrow(()->new IllegalArgumentException("코멘트가 없습니다."));
 
         commentRepository.save(new Comment(text, comment.getContent(), comment, user));
 
-        Set<Comment> commentSet = commentRepository.findByMommyId(commentId);
+        Set<Comment> commentSet = new HashSet<>();
+        commentSet.add(comment);
+        commentSet.addAll(commentRepository.findByMommyCommentOrderByIdAsc(comment));
 
         return getCommentList(commentSet);
     }
 
     public List<CommentDto> deleteComment(Long commentId, User user) {
 
-        Comment comment = commentRepository.findById(commentId)
+        Comment comment = commentRepository.findByIdAndStatus(commentId, StatusEnum.ACTIVE)
                 .orElseThrow(()->new IllegalArgumentException("댓글이 없습니다."));
 
 
@@ -81,8 +82,14 @@ public class CommentService {
         else {
             throw new IllegalArgumentException("게시물 삭제 권한이 없습니다.");
         }
+        Set<Comment> commentSet = new HashSet<>();
+        commentSet.add(comment);
 
-        Set<Comment> commentSet = commentRepository.findByContentId(comment.getContent().getId());
+        if(comment.getIsMommy()==LevelEnum.Y) {
+            commentSet.addAll(commentRepository.findByContentAndAndIsMommyOrderByIdAsc(comment.getContent(), LevelEnum.Y));
+        }else{
+            commentSet.addAll(commentRepository.findByMommyCommentOrderByIdAsc(comment));
+        }
 
         return getCommentList(commentSet);
 
@@ -92,19 +99,22 @@ public class CommentService {
         Content content = contentRepository.findById(contentId)
                 .orElseThrow(()->new IllegalArgumentException("컨텐츠가 없습니다."));
 
-        Set<Comment> commentSet = commentRepository.findByContentId(contentId);
+        //Set<Comment> commentSet = commentRepository.findByContentId(contentId);
+        Set<Comment> commentSet = commentRepository.findByContentAndAndIsMommyOrderByIdAsc(content, LevelEnum.Y);
 
         return getCommentList(commentSet);
 
     }
 
     public List<CommentDto> getReComment(Long commentId) {
-        Comment comment = commentRepository.findActiveComment(commentId)
+        Comment comment = commentRepository.findByIdAndStatus(commentId, StatusEnum.ACTIVE)
                 .orElseThrow(()->new IllegalArgumentException("코멘트가 없습니다."));
 
         Content content = comment.getContent();
 
-        Set<Comment> commentSet = commentRepository.findByMommyId(commentId);
+        Set<Comment> commentSet = new HashSet<>();
+        commentSet.add(comment);
+        commentSet.addAll(commentRepository.findByMommyCommentOrderByIdAsc(comment));
 
         return getCommentList(commentSet);
 

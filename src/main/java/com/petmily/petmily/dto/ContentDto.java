@@ -24,6 +24,7 @@ public class ContentDto {
         private Long userid;
         private String nickname;
         private List<String> imgs;
+        private String profileUrl;
 
         public ContentDto makeResponse(Content content){
                 return ContentDto.builder()
@@ -35,6 +36,7 @@ public class ContentDto {
                         .createdate(content.getCreateDate().toString())
                         .userid(content.getUser().getId())
                         .nickname(content.getUser().getNickName())
+                        .profileUrl(content.getUser().getImgUrl())
                         .imgs(content.getImgUrls())
                         .build();
         }

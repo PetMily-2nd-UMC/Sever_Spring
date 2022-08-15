@@ -23,7 +23,6 @@ public class ContentService {
     private final ContentRepository contentRepository;
     private final CategoryRepository categoryRepository;
     private final LikeRepository likeRepository;
-
     private final ImageRepository imageRepository;
     private final FileProcessService processService;
     private static final Logger logger = LoggerFactory.getLogger(ContentService.class);
@@ -73,6 +72,7 @@ public class ContentService {
                 .orElseThrow(()->new IllegalArgumentException("콘텐츠가 없습니다."));
     }
 
+    @Transactional
     public Content modifyContent(Long contentId, User user, ContentReq requestDto) {
 
        Content content = contentRepository.findById(contentId)

@@ -38,7 +38,6 @@ public class Content {
     private Integer commentCount;
 
     @CreationTimestamp
-    @Column(updatable = false)
     private Timestamp createDate;
 
     @UpdateTimestamp
@@ -82,9 +81,12 @@ public class Content {
 
     public List<String> getImgUrls(){
         List<String> urls = new ArrayList<>();
-        this.images.stream().forEach(image -> {
-            urls.add(image.getUrl());
-        });
-        return urls;
+        if(!this.images.isEmpty()){
+            this.images.stream().forEach(image -> {
+                urls.add(image.getUrl());
+            });
+            return urls;
+        }
+        return null;
     }
 }

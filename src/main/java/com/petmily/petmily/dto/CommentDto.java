@@ -38,7 +38,9 @@ public class CommentDto {
                 .text(comment.getText())
                 .userid(comment.getUser().getId())
                 .nickname(comment.getUser().getNickName())
-                .profileurl(comment.getUser().getProfileUrl())
+                .profileurl(comment.getUser().getImgUrl())
+                .commentCount(comment.getCommentCount())
+                .likeCount(comment.getLikeCount())
                 .createdate(comment.getCreateDate().toString())
                 .build();
     }
