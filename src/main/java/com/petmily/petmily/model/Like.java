@@ -22,7 +22,6 @@ public class Like {
     private StatusEnum status;
 
     @CreationTimestamp
-    @Column(updatable = false)
     private Timestamp createDate;
 
     @UpdateTimestamp

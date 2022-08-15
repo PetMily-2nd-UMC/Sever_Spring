@@ -18,7 +18,6 @@ public class Image {
     private Long id;
 
     @CreationTimestamp
-    @Column(updatable = false)
     private Timestamp createDate;
 
     @UpdateTimestamp
@@ -31,7 +30,7 @@ public class Image {
     @JoinColumn(name = "content_id", nullable = true)
     private Content content;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "user_id", nullable = true)
     private User user;
 

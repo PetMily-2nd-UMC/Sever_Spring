@@ -41,11 +41,11 @@ public class StartRunner implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
-        User testUser = new User("odie@gmail.com", passwordEncoder.encode("1234"),"odie", null, UserRoleEnum.USER, LoginEnum.General);
-        User testUser2 = new User("odie1@gmail.com", passwordEncoder.encode("1234"),"odie1", null, UserRoleEnum.USER, LoginEnum.General);
-        User testUser3 = new User("odie3@gmail.com", passwordEncoder.encode("1234"),"odie2", null, UserRoleEnum.USER, LoginEnum.General);
-        User testUser4 = new User("odie4@gmail.com", passwordEncoder.encode("1234"),"odie3", null, UserRoleEnum.USER, LoginEnum.General);
-        User testUser5 = new User("odie5@gmail.com", passwordEncoder.encode("1234"),"odie4", null, UserRoleEnum.USER, LoginEnum.General);
+        User testUser = new User("odie@gmail.com", passwordEncoder.encode("1234"),"odie",  UserRoleEnum.USER, LoginEnum.General);
+        User testUser2 = new User("odie1@gmail.com", passwordEncoder.encode("1234"),"odie1", UserRoleEnum.USER, LoginEnum.General);
+        User testUser3 = new User("odie3@gmail.com", passwordEncoder.encode("1234"),"odie2", UserRoleEnum.USER, LoginEnum.General);
+        User testUser4 = new User("odie4@gmail.com", passwordEncoder.encode("1234"),"odie3",  UserRoleEnum.USER, LoginEnum.General);
+        User testUser5 = new User("odie5@gmail.com", passwordEncoder.encode("1234"),"odie4", UserRoleEnum.USER, LoginEnum.General);
         userRepository.save(testUser);
         userRepository.save(testUser2);
         userRepository.save(testUser3);

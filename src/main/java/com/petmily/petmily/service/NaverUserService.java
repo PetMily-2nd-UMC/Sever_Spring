@@ -72,7 +72,7 @@ public class NaverUserService {
             String imgurl = null;
             UserRoleEnum role = UserRoleEnum.USER;
 
-            naverUser = new User(email, passwordEncoder.encode(password), nickname, imgurl, role, LoginEnum.Naver);
+            naverUser = new User(email, passwordEncoder.encode(password), nickname, role, LoginEnum.Naver);
 
             return userRepository.save(naverUser);
         }
