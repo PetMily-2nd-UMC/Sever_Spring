@@ -32,14 +32,10 @@ public class HomeController {
         List<CommPostReq> commPosts = homeService.getTopCommPost();
 
         return Result.toResult(ResultCode.LOAD_SUCCESS, TopPostDto.builder()
-                .contents(contents).build());
+                .contents(contents)
+                        .commPosts(commPosts)
+                .build());
     }
 
-    @PostMapping
-    public ResponseEntity<Result<TopPostDto>> getTopCommPost(){
-        List<CommPostReq> commPosts = homeService.getTopCommPost();
-        return Result.toResult(ResultCode.LOAD_SUCCESS, TopPostDto.builder()
-                .commPosts(commPosts).build());
-    }
 
 }
