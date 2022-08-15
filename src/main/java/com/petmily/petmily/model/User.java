@@ -4,6 +4,7 @@ import com.petmily.petmily.dto.LoginEnum;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -42,7 +43,11 @@ public class User implements UserDetails {
 
 
     @CreationTimestamp
+    @Column(updatable = false)
     private Timestamp createDate;
+
+    @UpdateTimestamp
+    private Timestamp updateDate;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

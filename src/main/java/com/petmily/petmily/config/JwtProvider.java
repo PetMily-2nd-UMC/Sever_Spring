@@ -57,7 +57,7 @@ public class JwtProvider {
                 .compact();
 
 
-        return new TokenDto("Bearer "+ accessToken, "Bearer "+ refreshToken, accessTokenExpireIn.getTime());
+        return new TokenDto(accessToken, refreshToken, accessTokenExpireIn.getTime());
     }
 
     public String getUserId(String token){

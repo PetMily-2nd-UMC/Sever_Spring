@@ -5,7 +5,7 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.petmily.petmily.dto.ServiceCategory;
+import com.petmily.petmily.model.ServiceCategory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,14 +21,18 @@ public class S3Service {
 
     private final String commFolder;
 
+    private final String profileFolder;
+
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     public S3Service(AmazonS3Client amazonS3, @Value("${cloud.aws.s3.bucket}") String bucket,
-                     @Value("${cloud.aws.s3.folder.content}") String contentFolder,@Value("${cloud.aws.s3.folder.community}") String commFolder) {
+                     @Value("${cloud.aws.s3.folder.content}") String contentFolder, @Value("${cloud.aws.s3.folder.community}") String commFolder,
+                     @Value("${cloud.aws.s3.folder.profile}") String profileFolder) {
         this.amazonS3 = amazonS3;
         this.bucket = bucket;
         this.contentFolder = contentFolder;
         this.commFolder = commFolder;
+        this.profileFolder = profileFolder;
     }
 
     public void uploadFile(InputStream inputStream, ObjectMetadata objectMetadata, String fileName){
@@ -50,6 +54,8 @@ public class S3Service {
             return this.contentFolder;
         } else if(category.equals(ServiceCategory.COMMPOST)){
             return this.commFolder;
+        }else if(category.equals(ServiceCategory.PROFILE)){
+            return this.profileFolder;
         }
         return null;
     }
