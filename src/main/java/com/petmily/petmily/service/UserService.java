@@ -68,8 +68,9 @@ public class UserService {
             imgurl = processService.uploadFile(file, ServiceCategory.PROFILE);
             image = new Image(imgurl, user);
             user.addProfile(image);
+            imageRepository.save(image);
         }
-        imageRepository.save(image);
+
         return userRepository.save(user);
     }
 
