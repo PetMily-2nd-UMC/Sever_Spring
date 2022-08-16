@@ -1,17 +1,18 @@
 package com.petmily.petmily.controller;
 
 import com.petmily.petmily.dto.ContentDto;
+import com.petmily.petmily.dto.ProfileDto;
 import com.petmily.petmily.dto.TopPostDto;
 import com.petmily.petmily.dto.commPost.CommPostReq;
+import com.petmily.petmily.model.User;
 import com.petmily.petmily.service.HomeService;
+import com.petmily.petmily.service.UserService;
 import com.petmily.petmily.util.Result;
 import com.petmily.petmily.util.ResultCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,9 +21,12 @@ import java.util.List;
 public class HomeController {
     private final HomeService homeService;
 
+    private final UserService userService;
+
     @Autowired
-    public HomeController(HomeService homeService) {
+    public HomeController(HomeService homeService, UserService userService) {
         this.homeService = homeService;
+        this.userService = userService;
     }
 
 
@@ -38,5 +42,15 @@ public class HomeController {
                 .build());
     }
 
+    @GetMapping("/profile")
+    public ResponseEntity<Result<ProfileDto>> getMyProfile(@AuthenticationPrincipal User user){
+        return Result.toResult(ResultCode.LOAD_SUCCESS, new ProfileDto().makeResponse(user));
+    }
+
+    @GetMapping("/profile/{userId}")
+    public ResponseEntity<Result<ProfileDto>> getUserProfile(@PathVariable Long userId){
+        User user = userService.getUserProfile(userId);
+        return Result.toResult(ResultCode.LOAD_SUCCESS, new ProfileDto().makeResponse(user));
+    }
 
 }

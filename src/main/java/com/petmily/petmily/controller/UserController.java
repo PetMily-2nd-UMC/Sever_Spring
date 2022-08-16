@@ -65,7 +65,7 @@ public class UserController {
         return Result.toResult(ResultCode.LOGIN_SUCCESS, tokenDto);
     }
 
-    @GetMapping("/register/google")
+    @PostMapping("/register/google")
     public ResponseEntity<Result<TokenDto>> registerGoogleUser(@RequestParam String email, @RequestParam String nickname) throws JsonProcessingException {
         TokenDto tokenDto = googleUserService.registerGoogleUser(email, nickname);
         return Result.toResult(ResultCode.LOGIN_SUCCESS, tokenDto);
