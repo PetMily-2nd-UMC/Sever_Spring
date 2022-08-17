@@ -1,9 +1,15 @@
 package com.petmily.petmily.model.commPost;
 
+import com.petmily.petmily.model.User;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
+import org.hibernate.annotations.CreationTimestamp;
+
+
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Setter
@@ -45,37 +51,52 @@ public class CommPost {
     @ColumnDefault("false")
     private boolean _isLiked;
 
-    @Column(nullable = true)
-    @ColumnDefault("null")
-    @OneToMany
-    private List<CommPostImg> imgs;  // private List<CommPostImgReq> imgs;
-
+    @CreationTimestamp
+    private LocalDateTime createdDate;
 
     @Column(nullable = true)
     @ColumnDefault("null")
     @OneToMany
-    private List<CommPostComment> comments;
+    private List<CommPostImg> imgs;
 
-    @Column(nullable = true)
-    @ColumnDefault("null")
-    @OneToMany
-    private List<CommPostLike> likes;
-
+    @ManyToOne
+    private User user;
 
     @Builder
     public CommPost(boolean _isMyPost, String profileUrl, boolean _isBookmarked, String title, String content,
-                    int commentCount, int likeCount, boolean _isLiked, List<CommPostImg> imgs,
-                    List<CommPostComment> comments, List<CommPostLike> likes) {
+                    int commentCount, int likeCount, boolean _isLiked, LocalDateTime createdDate, List<String> imgs){
         this._isMyPost = _isMyPost;
         this.profileUrl = profileUrl;
         this._isBookmarked = _isBookmarked;
         this.title = title;
         this.content = content;
-        this.commentCount = comments != null ? comments.size() : 0;
-        this.likeCount = likes != null ? likes.size() : 0;
+        this.commentCount = commentCount;
+        this.likeCount = likeCount;
         this._isLiked = _isLiked;
-        this.imgs = imgs;
-        this.comments = comments;
-        this.likes = likes;
+        this.createdDate = createdDate;
+    }
+
+    public CommPost(String title, String content, User user) {
+        this.title = title;
+        this.content = content;
+        this.user = user;
+    }
+
+    public void addImages(List<CommPostImg> imgs){ this.imgs = imgs; }
+
+    public List<String> getImgUrls(){
+        List<String> urls = new ArrayList<>();
+        if (!this.imgs.isEmpty()) {
+            this.imgs.stream().forEach(img -> {
+                urls.add(img.getUrl());
+            });
+            return urls;
+        }
+        return null;
+    }
+
+    public void updatePost(String title, String content) {
+        this.title = title;
+        this.content = content;
     }
 }
