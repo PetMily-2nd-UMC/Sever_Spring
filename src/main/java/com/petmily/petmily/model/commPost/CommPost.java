@@ -1,6 +1,5 @@
 package com.petmily.petmily.model.commPost;
 
-import com.petmily.petmily.model.User;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -59,12 +58,19 @@ public class CommPost {
     @OneToMany
     private List<CommPostImg> imgs;
 
+    @Column(nullable = true)
+    @ColumnDefault("null")
+    @OneToMany
+    private List<CommPostImg> imgs;
+
+
     @ManyToOne
     private User user;
 
     @Builder
     public CommPost(boolean _isMyPost, String profileUrl, boolean _isBookmarked, String title, String content,
                     int commentCount, int likeCount, boolean _isLiked, LocalDateTime createdDate, List<String> imgs){
+
         this._isMyPost = _isMyPost;
         this.profileUrl = profileUrl;
         this._isBookmarked = _isBookmarked;

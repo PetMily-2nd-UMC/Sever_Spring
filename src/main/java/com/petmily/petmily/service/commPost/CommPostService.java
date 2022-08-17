@@ -18,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CommPostService {
@@ -66,9 +65,6 @@ public class CommPostService {
         CommPost commPost = commPostRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("게시물이 없습니다"));
 
-//        commPost.setTitle(requestDto.getTitle());
-//        commPost.setContent(requestDto.getContent());
-//        commPost.setImgs(requestDto.getImgs());
         String title = requestDto.getTitle();
         String content = requestDto.getContent();
         List<MultipartFile> imgs = requestDto.getImgs();

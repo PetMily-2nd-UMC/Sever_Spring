@@ -2,6 +2,7 @@ package com.petmily.petmily.controller;
 
 import com.petmily.petmily.dto.ContentDto;
 import com.petmily.petmily.dto.TopPostDto;
+import com.petmily.petmily.dto.commPost.CommPostReq;
 import com.petmily.petmily.service.HomeService;
 import com.petmily.petmily.util.Result;
 import com.petmily.petmily.util.ResultCode;
@@ -28,9 +29,13 @@ public class HomeController {
     public ResponseEntity<Result<TopPostDto>> getTopPost(){
         //Content DB로부터 top5 컨텐츠를 가져옴
         List<ContentDto> contents = homeService.getTopContent();
-        // List<CommPost> tmps = null; 초니님 코드에 맞게 코드 수정해주세요.
+        List<CommPostReq> commPosts = homeService.getTopCommPost();
+
         return Result.toResult(ResultCode.LOAD_SUCCESS, TopPostDto.builder()
-                                                .contents(contents).build());
+                .contents(contents)
+                        .commPosts(commPosts)
+                .build());
     }
+
 
 }

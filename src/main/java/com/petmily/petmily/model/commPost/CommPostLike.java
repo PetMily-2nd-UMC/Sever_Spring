@@ -27,7 +27,6 @@ public class CommPostLike {
     @ManyToOne
     private User user;
 
-
     @Builder
     public CommPostLike(String nickname, String likedAt) {
         this.nickname = nickname;

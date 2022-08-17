@@ -1,6 +1,9 @@
 package com.petmily.petmily.repository;
 
 import com.petmily.petmily.model.Comment;
+import com.petmily.petmily.model.Content;
+import com.petmily.petmily.model.LevelEnum;
+import com.petmily.petmily.model.StatusEnum;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -15,7 +18,10 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     Optional<Comment> findById(Long commentId);
 
-    @Query(value = "select * from Comment c where c.content_id = :contentId order by c.create_date desc"
-    ,nativeQuery = true)
-    HashSet<Comment> findByContentId(Long contentId);
+    HashSet<Comment> findByContentAndAndIsMommyOrderByIdAsc(Content content, LevelEnum levelEnum);
+
+    HashSet<Comment> findByMommyCommentOrderByIdAsc(Comment comment);
+
+    Optional<Comment> findByIdAndStatus(Long id, StatusEnum statusEnum);
+
 }

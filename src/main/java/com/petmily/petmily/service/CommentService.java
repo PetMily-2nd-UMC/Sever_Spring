@@ -1,30 +1,32 @@
 package com.petmily.petmily.service;
 
 import com.petmily.petmily.dto.CommentDto;
-import com.petmily.petmily.model.Comment;
-import com.petmily.petmily.model.Content;
-import com.petmily.petmily.model.User;
+import com.petmily.petmily.model.*;
 import com.petmily.petmily.repository.CommentRepository;
 import com.petmily.petmily.repository.ContentRepository;
+import com.petmily.petmily.repository.LikeRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class CommentService {
     private final CommentRepository commentRepository;
     private final ContentRepository contentRepository;
+
+    private final LikeRepository likeRepository;
+
     private static final Logger logger = LoggerFactory.getLogger(CommentService.class);
 
     @Autowired
-    public CommentService(CommentRepository commentRepository, ContentRepository contentRepository) {
+    public CommentService(CommentRepository commentRepository, ContentRepository contentRepository, LikeRepository likeRepository) {
         this.commentRepository = commentRepository;
         this.contentRepository = contentRepository;
+        this.likeRepository = likeRepository;
     }
 
 
@@ -41,20 +43,35 @@ public class CommentService {
         return list;
     }
 
+    @Transactional
     public List<CommentDto> createComment(Long contentId, User user, String text) {
         Content content = contentRepository.findById(contentId)
                 .orElseThrow(()->new IllegalArgumentException("컨텐츠가 없습니다."));
-
         commentRepository.save(new Comment(text, content, user));
 
-        Set<Comment> commentSet = commentRepository.findByContentId(contentId);
+        Set<Comment> commentSet = commentRepository.findByContentAndAndIsMommyOrderByIdAsc(content, LevelEnum.Y);
+
+        return getCommentList(commentSet);
+    }
+
+    @Transactional
+    public List<CommentDto> createReComment(Long commentId, User user, String text) {
+
+        Comment comment = commentRepository.findByIdAndStatus(commentId, StatusEnum.ACTIVE)
+                .orElseThrow(()->new IllegalArgumentException("코멘트가 없습니다."));
+
+        commentRepository.save(new Comment(text, comment.getContent(), comment, user));
+
+        Set<Comment> commentSet = new HashSet<>();
+        commentSet.add(comment);
+        commentSet.addAll(commentRepository.findByMommyCommentOrderByIdAsc(comment));
 
         return getCommentList(commentSet);
     }
 
     public List<CommentDto> deleteComment(Long commentId, User user) {
 
-        Comment comment = commentRepository.findById(commentId)
+        Comment comment = commentRepository.findByIdAndStatus(commentId, StatusEnum.ACTIVE)
                 .orElseThrow(()->new IllegalArgumentException("댓글이 없습니다."));
 
 
@@ -65,10 +82,73 @@ public class CommentService {
         else {
             throw new IllegalArgumentException("게시물 삭제 권한이 없습니다.");
         }
+        Set<Comment> commentSet = new HashSet<>();
+        commentSet.add(comment);
 
-        Set<Comment> commentSet = commentRepository.findByContentId(comment.getContent().getId());
+        if(comment.getIsMommy()==LevelEnum.Y) {
+            commentSet.addAll(commentRepository.findByContentAndAndIsMommyOrderByIdAsc(comment.getContent(), LevelEnum.Y));
+        }else{
+            commentSet.addAll(commentRepository.findByMommyCommentOrderByIdAsc(comment));
+        }
 
         return getCommentList(commentSet);
 
+    }
+
+    public List<CommentDto> getContentComment(Long contentId) {
+        Content content = contentRepository.findById(contentId)
+                .orElseThrow(()->new IllegalArgumentException("컨텐츠가 없습니다."));
+
+        //Set<Comment> commentSet = commentRepository.findByContentId(contentId);
+        Set<Comment> commentSet = commentRepository.findByContentAndAndIsMommyOrderByIdAsc(content, LevelEnum.Y);
+
+        return getCommentList(commentSet);
+
+    }
+
+    public List<CommentDto> getReComment(Long commentId) {
+        Comment comment = commentRepository.findByIdAndStatus(commentId, StatusEnum.ACTIVE)
+                .orElseThrow(()->new IllegalArgumentException("코멘트가 없습니다."));
+
+        Content content = comment.getContent();
+
+        Set<Comment> commentSet = new HashSet<>();
+        commentSet.add(comment);
+        commentSet.addAll(commentRepository.findByMommyCommentOrderByIdAsc(comment));
+
+        return getCommentList(commentSet);
+
+    }
+
+    public Comment addLike(Long commentId, User user) {
+
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(()->new IllegalArgumentException("콘텐츠가 없습니다."));
+
+        logger.error("addLike");
+        Like userLike = new Like();
+
+        if(!comment.getUser().getId().equals(user.getId())){
+            Optional<Like> like =likeRepository.findByContentIdAndUserId(commentId, user.getId());
+            logger.error(like.toString());
+
+            if(like.isEmpty()){
+                logger.error("isempty");
+                userLike = new Like(comment, user);
+            }
+            else if(like.get().getStatus() == StatusEnum.ACTIVE){
+                userLike = like.get();
+                userLike.setStatus(StatusEnum.DELETED);
+            }
+            else if(like.get().getStatus() == StatusEnum.DELETED){
+                userLike = like.get();
+                userLike.setStatus(StatusEnum.ACTIVE);
+            }
+        }
+        else {
+            throw new IllegalArgumentException("자신의 글에 좋아요를 남길 수 없습니다.");
+        }
+
+        return likeRepository.save(userLike).getComment();
     }
 }
