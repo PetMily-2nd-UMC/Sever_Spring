@@ -77,7 +77,7 @@ public class KakaoUserService {
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type","authorization_code");
         body.add("client_id",clientId);
-        body.add("redirect_uri","http://localhost:8080/user/kakao");
+        body.add("redirect_uri","http://3.39.107.27/user/kakao");
         body.add("code",code);
 
         HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new HttpEntity<>(body, headers);

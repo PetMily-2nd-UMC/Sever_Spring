@@ -88,7 +88,7 @@ public class NaverUserService {
         body.add("grant_type","authorization_code");
         body.add("client_id",clientId);
         body.add("client_secret",clientSecret);
-        body.add("redirect_uri","http://localhost:8080/user/naver");
+        body.add("redirect_uri","http://3.39.107.27/user/naver");
         body.add("code",code);
         body.add("state",state);
 

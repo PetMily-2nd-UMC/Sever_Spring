@@ -125,4 +125,12 @@ public class GoogleUserService {
 
         return new SocialUserDto(email, nickname);
     }
+
+    public TokenDto registerGoogleUser(String email, String nickname) {
+        SocialUserDto googleUserInfo = new SocialUserDto(email, nickname);
+
+        User googleUser = registerGoogleUserIfNeeded(googleUserInfo);
+
+        return jwtProvider.generateToken(googleUser.getEmail());
+    }
 }

@@ -1,10 +1,7 @@
 package com.petmily.petmily.service;
 
 import com.petmily.petmily.config.JwtProvider;
-import com.petmily.petmily.dto.LoginEnum;
-import com.petmily.petmily.dto.LoginReq;
-import com.petmily.petmily.dto.SignupReq;
-import com.petmily.petmily.dto.TokenDto;
+import com.petmily.petmily.dto.*;
 import com.petmily.petmily.model.Image;
 import com.petmily.petmily.model.ServiceCategory;
 import com.petmily.petmily.model.User;
@@ -68,8 +65,9 @@ public class UserService {
             imgurl = processService.uploadFile(file, ServiceCategory.PROFILE);
             image = new Image(imgurl, user);
             user.addProfile(image);
+            imageRepository.save(image);
         }
-        imageRepository.save(image);
+
         return userRepository.save(user);
     }
 
@@ -93,4 +91,7 @@ public class UserService {
     }
 
 
+    public User getUserProfile(Long userId) {
+        return userRepository.findById(userId).orElse(null);
+    }
 }
